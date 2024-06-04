@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -7,10 +9,12 @@ from main.forms import StudentForm, SubjectForm
 from main.models import Student, Subject
 
 
-class StudentListView(ListView):
+class StudentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Student
+    permission_required = 'main.view_student'
 
 
+@login_required
 def contact(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -24,17 +28,23 @@ def contact(request):
     return render(request, 'main/contact.html', context)
 
 
-class StudentDetailView(DetailView):
+class StudentDetailView(LoginRequiredMixin, DetailView):
     model = Student
 
-class StudentCreateView(CreateView):
+
+class StudentCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Student
     form_class = StudentForm
+    permission_required = 'main.add_student'
     success_url = reverse_lazy('main:index')
-class StudentUpdateView(UpdateView):
+
+
+class StudentUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Student
     form_class = StudentForm
+    permission_required = 'main.change_student'
     success_url = reverse_lazy('main:index')
+
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -55,9 +65,13 @@ class StudentUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class StudentDeleteView(DeleteView):
+class StudentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Student
     success_url = reverse_lazy('main:index')
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
 
 def toggle_activity(request, pk):
     student_item = get_object_or_404(Student, pk=pk)
