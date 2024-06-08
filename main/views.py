@@ -28,8 +28,9 @@ def contact(request):
     return render(request, 'main/contact.html', context)
 
 
-class StudentDetailView(LoginRequiredMixin, DetailView):
+class StudentDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Student
+    permission_required = 'main.view_student'
 
 
 class StudentCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
