@@ -5,24 +5,39 @@
     <div class="card mb-4 box-shadow">
         <div class="card-body">
             <p class="card-text">
-                Офис МСК<br>
-                Офис СПБ
+                Офис МСК<br> +7(495)554-44-45<br><br>
+                Офис СПБ<br> +7(812)554-44-45
             </p>
         </div>
     </div>
 </div>
-<div class="col-md-4">
-    <div class="card mb-4 box-shadow">
-        <div class="card-body">
-            <h2>Напишите нам</h2>
-            <form method="post">
-                {% csrf_token %}
-                <input class="form-control mb-2" name="name"/>
-                <input class="form-control mb-2" name="email"/>
-                <textarea class="form-control mb-2" name="message"></textarea>
-                <button type="submit" class=" btn btn-primary form-control">Отправить</button>
-            </form>
-        </div>
-    </div>
+<div class="col-lg-5 col-md-6 col-sm-12">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Свяжитесь с нами</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="" class="form-floating">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name">Имя</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Ваше имя"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">Телефон</label>
+                            <input type="text" name="phone" class="form-control" id="phone"
+                                   placeholder="Контактный телефон" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message">Сообщение</label>
+                            <textarea type="text" name="message" class="form-control" id="message"
+                                      placeholder="Введите сообщение" required></textarea>
+                        </div>
+                        <input type="submit" class="btn btn-lg btn-block btn-outline-dark"/>
+                    </form>
+
+                </div>
+            </div>
 </div>
 {% endblock %}
